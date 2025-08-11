@@ -1,764 +1,825 @@
 <!DOCTYPE html>
 <html lang="vi" class="js csstransforms3d">
-  <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="generator" content="Hugo 0.123.8">
-    <meta name="description" content="">
-<meta name="author" content="journeyoftheaverageguy@gmail.com">
 
-    <link rel="icon" href="/workshopFCJ.io/images/favicon.png" type="image/png">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="generator" content="Hugo 0.123.8">
+  <meta name="description" content="">
+  <meta name="author" content="journeyoftheaverageguy@gmail.com">
 
-    <title>Tổng Quan và Cấu Hình AWS WAF ,cloudfront&#34; :: AWS System Manager</title>
+  <link rel="icon" href="/workshopFCJ.io/images/favicon.png" type="image/png">
 
-    
-    <link href="/workshopFCJ.io/css/nucleus.css?1754923221" rel="stylesheet">
-    <link href="/workshopFCJ.io/css/fontawesome-all.min.css?1754923221" rel="stylesheet">
-    <link href="/workshopFCJ.io/css/hybrid.css?1754923221" rel="stylesheet">
-    <link href="/workshopFCJ.io/css/featherlight.min.css?1754923221" rel="stylesheet">
-    <link href="/workshopFCJ.io/css/perfect-scrollbar.min.css?1754923221" rel="stylesheet">
-    <link href="/workshopFCJ.io/css/auto-complete.css?1754923221" rel="stylesheet">
-    <link href="/workshopFCJ.io/css/atom-one-dark-reasonable.css?1754923221" rel="stylesheet">
-    <link href="/workshopFCJ.io/css/theme.css?1754923221" rel="stylesheet">
-    <link href="/workshopFCJ.io/css/hugo-theme.css?1754923221" rel="stylesheet">
-    
-    <link href="/workshopFCJ.io/css/theme-workshop.css?1754923221" rel="stylesheet">
-    
-    
+  <title>Tổng Quan và Cấu Hình AWS WAF ,cloudfront&#34; :: AWS System Manager</title>
 
-    <script src="/workshopFCJ.io/js/jquery-3.3.1.min.js?1754923221"></script>
 
-    <style>
-      :root #header + #content > #left > #rlblock_left{
-          display:none !important;
-      }
-      
-    </style>
-    
-  </head>
-  <body class="" data-url="/workshopFCJ.io/vi/5-portfwd/">
-    <nav id="sidebar" class="showVisitedLinks">
+  <link href="/workshopFCJ.io/css/nucleus.css?1754925934" rel="stylesheet">
+  <link href="/workshopFCJ.io/css/fontawesome-all.min.css?1754925934" rel="stylesheet">
+  <link href="/workshopFCJ.io/css/hybrid.css?1754925934" rel="stylesheet">
+  <link href="/workshopFCJ.io/css/featherlight.min.css?1754925934" rel="stylesheet">
+  <link href="/workshopFCJ.io/css/perfect-scrollbar.min.css?1754925934" rel="stylesheet">
+  <link href="/workshopFCJ.io/css/auto-complete.css?1754925934" rel="stylesheet">
+  <link href="/workshopFCJ.io/css/atom-one-dark-reasonable.css?1754925934" rel="stylesheet">
+  <link href="/workshopFCJ.io/css/theme.css?1754925934" rel="stylesheet">
+  <link href="/workshopFCJ.io/css/hugo-theme.css?1754925934" rel="stylesheet">
+
+  <link href="/workshopFCJ.io/css/theme-workshop.css?1754925934" rel="stylesheet">
 
 
 
-  <div id="header-wrapper">
-    <div id="header">
-      <a id="logo" href="/">
+  <script src="/workshopFCJ.io/js/jquery-3.3.1.min.js?1754925934"></script>
 
-<svg id="Layer_1" data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 60 30" width="30%"><defs><style>.cls-1{fill:#fff;}.cls-2{fill:#f90;fill-rule:evenodd;}</style></defs><title>AWS-Logo_White-Color</title><path class="cls-1" d="M14.09,10.85a4.7,4.7,0,0,0,.19,1.48,7.73,7.73,0,0,0,.54,1.19.77.77,0,0,1,.12.38.64.64,0,0,1-.32.49l-1,.7a.83.83,0,0,1-.44.15.69.69,0,0,1-.49-.23,3.8,3.8,0,0,1-.6-.77q-.25-.42-.51-1a6.14,6.14,0,0,1-4.89,2.3,4.54,4.54,0,0,1-3.32-1.19,4.27,4.27,0,0,1-1.22-3.2A4.28,4.28,0,0,1,3.61,7.75,6.06,6.06,0,0,1,7.69,6.46a12.47,12.47,0,0,1,1.76.13q.92.13,1.91.36V5.73a3.65,3.65,0,0,0-.79-2.66A3.81,3.81,0,0,0,7.86,2.3a7.71,7.71,0,0,0-1.79.22,12.78,12.78,0,0,0-1.79.57,4.55,4.55,0,0,1-.58.22l-.26,0q-.35,0-.35-.52V2a1.09,1.09,0,0,1,.12-.58,1.2,1.2,0,0,1,.47-.35A10.88,10.88,0,0,1,5.77.32,10.19,10.19,0,0,1,8.36,0a6,6,0,0,1,4.35,1.35,5.49,5.49,0,0,1,1.38,4.09ZM7.34,13.38a5.36,5.36,0,0,0,1.72-.31A3.63,3.63,0,0,0,10.63,12,2.62,2.62,0,0,0,11.19,11a5.63,5.63,0,0,0,.16-1.44v-.7a14.35,14.35,0,0,0-1.53-.28,12.37,12.37,0,0,0-1.56-.1,3.84,3.84,0,0,0-2.47.67A2.34,2.34,0,0,0,5,11a2.35,2.35,0,0,0,.61,1.76A2.4,2.4,0,0,0,7.34,13.38Zm13.35,1.8a1,1,0,0,1-.64-.16,1.3,1.3,0,0,1-.35-.65L15.81,1.51a3,3,0,0,1-.15-.67.36.36,0,0,1,.41-.41H17.7a1,1,0,0,1,.65.16,1.4,1.4,0,0,1,.33.65l2.79,11,2.59-11A1.17,1.17,0,0,1,24.39.6a1.1,1.1,0,0,1,.67-.16H26.4a1.1,1.1,0,0,1,.67.16,1.17,1.17,0,0,1,.32.65L30,12.39,32.88,1.25A1.39,1.39,0,0,1,33.22.6a1,1,0,0,1,.65-.16h1.54a.36.36,0,0,1,.41.41,1.36,1.36,0,0,1,0,.26,3.64,3.64,0,0,1-.12.41l-4,12.86a1.3,1.3,0,0,1-.35.65,1,1,0,0,1-.64.16H29.25a1,1,0,0,1-.67-.17,1.26,1.26,0,0,1-.32-.67L25.67,3.64,23.11,14.34a1.26,1.26,0,0,1-.32.67,1,1,0,0,1-.67.17Zm21.36.44a11.28,11.28,0,0,1-2.56-.29,7.44,7.44,0,0,1-1.92-.67,1,1,0,0,1-.61-.93v-.84q0-.52.38-.52a.9.9,0,0,1,.31.06l.42.17a8.77,8.77,0,0,0,1.83.58,9.78,9.78,0,0,0,2,.2,4.48,4.48,0,0,0,2.43-.55,1.76,1.76,0,0,0,.86-1.57,1.61,1.61,0,0,0-.45-1.16A4.29,4.29,0,0,0,43,9.22l-2.41-.76A5.15,5.15,0,0,1,38,6.78a3.94,3.94,0,0,1-.83-2.41,3.7,3.7,0,0,1,.45-1.85,4.47,4.47,0,0,1,1.19-1.37A5.27,5.27,0,0,1,40.51.29,7.4,7.4,0,0,1,42.6,0a8.87,8.87,0,0,1,1.12.07q.57.07,1.08.19t.95.26a4.27,4.27,0,0,1,.7.29,1.59,1.59,0,0,1,.49.41.94.94,0,0,1,.15.55v.79q0,.52-.38.52a1.76,1.76,0,0,1-.64-.2,7.74,7.74,0,0,0-3.2-.64,4.37,4.37,0,0,0-2.21.47,1.6,1.6,0,0,0-.79,1.48,1.58,1.58,0,0,0,.49,1.18,4.94,4.94,0,0,0,1.83.92L44.55,7a5.08,5.08,0,0,1,2.57,1.6A3.76,3.76,0,0,1,47.9,11a4.21,4.21,0,0,1-.44,1.93,4.4,4.4,0,0,1-1.21,1.47,5.43,5.43,0,0,1-1.85.93A8.25,8.25,0,0,1,42.05,15.62Z"></path><path class="cls-2" d="M45.19,23.81C39.72,27.85,31.78,30,25,30A36.64,36.64,0,0,1,.22,20.57c-.51-.46-.06-1.09.56-.74A49.78,49.78,0,0,0,25.53,26.4,49.23,49.23,0,0,0,44.4,22.53C45.32,22.14,46.1,23.14,45.19,23.81Z"></path><path class="cls-2" d="M47.47,21.21c-.7-.9-4.63-.42-6.39-.21-.53.06-.62-.4-.14-.74,3.13-2.2,8.27-1.57,8.86-.83s-.16,5.89-3.09,8.35c-.45.38-.88.18-.68-.32C46.69,25.8,48.17,22.11,47.47,21.21Z"></path></svg>
+  <style>
+    :root #header+#content>#left>#rlblock_left {
+      display: none !important;
+    }
+  </style>
 
-</a>
+</head>
+
+<body class="" data-url="/workshopFCJ.io/vi/5-portfwd/">
+  <nav id="sidebar" class="showVisitedLinks">
+
+
+
+    <div id="header-wrapper">
+      <div id="header">
+        <a id="logo" href="/">
+
+          <svg id="Layer_1" data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 60 30" width="30%">
+            <defs>
+              <style>
+                .cls-1 {
+                  fill: #fff;
+                }
+
+                .cls-2 {
+                  fill: #f90;
+                  fill-rule: evenodd;
+                }
+              </style>
+            </defs>
+            <title>AWS-Logo_White-Color</title>
+            <path class="cls-1"
+              d="M14.09,10.85a4.7,4.7,0,0,0,.19,1.48,7.73,7.73,0,0,0,.54,1.19.77.77,0,0,1,.12.38.64.64,0,0,1-.32.49l-1,.7a.83.83,0,0,1-.44.15.69.69,0,0,1-.49-.23,3.8,3.8,0,0,1-.6-.77q-.25-.42-.51-1a6.14,6.14,0,0,1-4.89,2.3,4.54,4.54,0,0,1-3.32-1.19,4.27,4.27,0,0,1-1.22-3.2A4.28,4.28,0,0,1,3.61,7.75,6.06,6.06,0,0,1,7.69,6.46a12.47,12.47,0,0,1,1.76.13q.92.13,1.91.36V5.73a3.65,3.65,0,0,0-.79-2.66A3.81,3.81,0,0,0,7.86,2.3a7.71,7.71,0,0,0-1.79.22,12.78,12.78,0,0,0-1.79.57,4.55,4.55,0,0,1-.58.22l-.26,0q-.35,0-.35-.52V2a1.09,1.09,0,0,1,.12-.58,1.2,1.2,0,0,1,.47-.35A10.88,10.88,0,0,1,5.77.32,10.19,10.19,0,0,1,8.36,0a6,6,0,0,1,4.35,1.35,5.49,5.49,0,0,1,1.38,4.09ZM7.34,13.38a5.36,5.36,0,0,0,1.72-.31A3.63,3.63,0,0,0,10.63,12,2.62,2.62,0,0,0,11.19,11a5.63,5.63,0,0,0,.16-1.44v-.7a14.35,14.35,0,0,0-1.53-.28,12.37,12.37,0,0,0-1.56-.1,3.84,3.84,0,0,0-2.47.67A2.34,2.34,0,0,0,5,11a2.35,2.35,0,0,0,.61,1.76A2.4,2.4,0,0,0,7.34,13.38Zm13.35,1.8a1,1,0,0,1-.64-.16,1.3,1.3,0,0,1-.35-.65L15.81,1.51a3,3,0,0,1-.15-.67.36.36,0,0,1,.41-.41H17.7a1,1,0,0,1,.65.16,1.4,1.4,0,0,1,.33.65l2.79,11,2.59-11A1.17,1.17,0,0,1,24.39.6a1.1,1.1,0,0,1,.67-.16H26.4a1.1,1.1,0,0,1,.67.16,1.17,1.17,0,0,1,.32.65L30,12.39,32.88,1.25A1.39,1.39,0,0,1,33.22.6a1,1,0,0,1,.65-.16h1.54a.36.36,0,0,1,.41.41,1.36,1.36,0,0,1,0,.26,3.64,3.64,0,0,1-.12.41l-4,12.86a1.3,1.3,0,0,1-.35.65,1,1,0,0,1-.64.16H29.25a1,1,0,0,1-.67-.17,1.26,1.26,0,0,1-.32-.67L25.67,3.64,23.11,14.34a1.26,1.26,0,0,1-.32.67,1,1,0,0,1-.67.17Zm21.36.44a11.28,11.28,0,0,1-2.56-.29,7.44,7.44,0,0,1-1.92-.67,1,1,0,0,1-.61-.93v-.84q0-.52.38-.52a.9.9,0,0,1,.31.06l.42.17a8.77,8.77,0,0,0,1.83.58,9.78,9.78,0,0,0,2,.2,4.48,4.48,0,0,0,2.43-.55,1.76,1.76,0,0,0,.86-1.57,1.61,1.61,0,0,0-.45-1.16A4.29,4.29,0,0,0,43,9.22l-2.41-.76A5.15,5.15,0,0,1,38,6.78a3.94,3.94,0,0,1-.83-2.41,3.7,3.7,0,0,1,.45-1.85,4.47,4.47,0,0,1,1.19-1.37A5.27,5.27,0,0,1,40.51.29,7.4,7.4,0,0,1,42.6,0a8.87,8.87,0,0,1,1.12.07q.57.07,1.08.19t.95.26a4.27,4.27,0,0,1,.7.29,1.59,1.59,0,0,1,.49.41.94.94,0,0,1,.15.55v.79q0,.52-.38.52a1.76,1.76,0,0,1-.64-.2,7.74,7.74,0,0,0-3.2-.64,4.37,4.37,0,0,0-2.21.47,1.6,1.6,0,0,0-.79,1.48,1.58,1.58,0,0,0,.49,1.18,4.94,4.94,0,0,0,1.83.92L44.55,7a5.08,5.08,0,0,1,2.57,1.6A3.76,3.76,0,0,1,47.9,11a4.21,4.21,0,0,1-.44,1.93,4.4,4.4,0,0,1-1.21,1.47,5.43,5.43,0,0,1-1.85.93A8.25,8.25,0,0,1,42.05,15.62Z">
+            </path>
+            <path class="cls-2"
+              d="M45.19,23.81C39.72,27.85,31.78,30,25,30A36.64,36.64,0,0,1,.22,20.57c-.51-.46-.06-1.09.56-.74A49.78,49.78,0,0,0,25.53,26.4,49.23,49.23,0,0,0,44.4,22.53C45.32,22.14,46.1,23.14,45.19,23.81Z">
+            </path>
+            <path class="cls-2"
+              d="M47.47,21.21c-.7-.9-4.63-.42-6.39-.21-.53.06-.62-.4-.14-.74,3.13-2.2,8.27-1.57,8.86-.83s-.16,5.89-3.09,8.35c-.45.38-.88.18-.68-.32C46.69,25.8,48.17,22.11,47.47,21.21Z">
+            </path>
+          </svg>
+
+        </a>
+
+      </div>
+
+      <div class="searchbox">
+        <label for="search-by"><i class="fas fa-search"></i></label>
+        <input data-search-input id="search-by" type="search" placeholder="Search...">
+        <span data-search-clear=""><i class="fas fa-times"></i></span>
+      </div>
+
+      <script type="text/javascript" src="/workshopFCJ.io/js/lunr.min.js?1754925934"></script>
+      <script type="text/javascript" src="/workshopFCJ.io/js/auto-complete.js?1754925934"></script>
+      <script type="text/javascript">
+
+        var baseurl = "https:\/\/binh2401.github.io\/workshopFCJ.io\/\/vi";
+
+      </script>
+      <script type="text/javascript" src="/workshopFCJ.io/js/search.js?1754925934"></script>
+
 
     </div>
-    
-        <div class="searchbox">
-    <label for="search-by"><i class="fas fa-search"></i></label>
-    <input data-search-input id="search-by" type="search" placeholder="Search...">
-    <span data-search-clear=""><i class="fas fa-times"></i></span>
-</div>
-
-<script type="text/javascript" src="/workshopFCJ.io/js/lunr.min.js?1754923221"></script>
-<script type="text/javascript" src="/workshopFCJ.io/js/auto-complete.js?1754923221"></script>
-<script type="text/javascript">
-    
-        var baseurl = "https:\/\/binh2401.github.io\/workshopFCJ.io\/\/vi";
-    
-</script>
-<script type="text/javascript" src="/workshopFCJ.io/js/search.js?1754923221"></script>
-
-    
-  </div>
 
     <div class="highlightable">
-    <ul class="topics">
-
-        
-          
-          
+      <ul class="topics">
 
 
 
 
- 
-  
-    
-    <li data-nav-id="/workshopFCJ.io/vi/1-introduce/" title="Xây dựng hệ thống bán sách trực tuyến triển khai trên AWS" class="dd-item 
-        
-        
-        
-        ">
-      <a href="/workshopFCJ.io/vi/1-introduce/">
-           <b> 1. </b> Xây dựng hệ thống bán sách trực tuyến triển khai trên AWS
-          
-            <i class="fas fa-check read-icon"></i>
-          
-      </a>
-      
-              
-    </li>
-  
- 
-
-          
-          
 
 
 
 
- 
-  
-    
-    <li data-nav-id="/workshopFCJ.io/vi/2-prerequiste/" title="Các Bước Chuẩn Bị" class="dd-item 
+
+
+
+        <li data-nav-id="/workshopFCJ.io/vi/1-introduce/"
+          title="Xây dựng hệ thống bán sách trực tuyến triển khai trên AWS" class="dd-item 
         
         
         
         ">
-      <a href="/workshopFCJ.io/vi/2-prerequiste/">
-           <b> 2. </b> Các Bước Chuẩn Bị
-          
+          <a href="/workshopFCJ.io/vi/1-introduce/">
+            <b> 1. </b> Xây dựng hệ thống bán sách trực tuyến triển khai trên AWS
+
             <i class="fas fa-check read-icon"></i>
-          
-      </a>
-      
-      
-        <ul>
-          
-          
-            
-          
-          
-          
-        
-          
-            
-            
+
+          </a>
+
+
+        </li>
 
 
 
 
- 
-  
-    
-    <li data-nav-id="/workshopFCJ.io/vi/2-prerequiste/2.1-createec2/" title="Chuẩn bị VPC và EC2" class="dd-item 
+
+
+
+
+
+
+
+
+        <li data-nav-id="/workshopFCJ.io/vi/2-prerequiste/" title="Các Bước Chuẩn Bị" class="dd-item 
         
         
         
         ">
-      <a href="/workshopFCJ.io/vi/2-prerequiste/2.1-createec2/">
-           <b> 2.1 </b> Chuẩn bị VPC và EC2
-          
+          <a href="/workshopFCJ.io/vi/2-prerequiste/">
+            <b> 2. </b> Các Bước Chuẩn Bị
+
             <i class="fas fa-check read-icon"></i>
-          
-      </a>
-      
-      
-        <ul>
-          
-          
-            
-          
-          
-          
-        
-          
-            
-            
+
+          </a>
+
+
+          <ul>
 
 
 
 
- 
-  
-    
-    <li data-nav-id="/workshopFCJ.io/vi/2-prerequiste/2.1-createec2/2.1.1-createvpc/" title="Tạo VPC và chỉnh cấu hình" class="dd-item 
+
+
+
+
+
+
+
+
+
+
+
+
+
+            <li data-nav-id="/workshopFCJ.io/vi/2-prerequiste/2.1-createec2/" title="Chuẩn bị VPC và EC2" class="dd-item 
         
         
         
         ">
-      <a href="/workshopFCJ.io/vi/2-prerequiste/2.1-createec2/2.1.1-createvpc/">
-           <b> 2.1.1 </b> Tạo VPC và chỉnh cấu hình
-          
-            <i class="fas fa-check read-icon"></i>
-          
-      </a>
-      
-              
-    </li>
-  
- 
+              <a href="/workshopFCJ.io/vi/2-prerequiste/2.1-createec2/">
+                <b> 2.1 </b> Chuẩn bị VPC và EC2
 
-            
-          
-            
-            
+                <i class="fas fa-check read-icon"></i>
+
+              </a>
+
+
+              <ul>
 
 
 
 
- 
-  
-    
-    <li data-nav-id="/workshopFCJ.io/vi/2-prerequiste/2.1-createec2/2.1.2-createpublicsubnet/" title="Tạo Public subnet" class="dd-item 
+
+
+
+
+
+
+
+
+
+
+
+
+
+                <li data-nav-id="/workshopFCJ.io/vi/2-prerequiste/2.1-createec2/2.1.1-createvpc/"
+                  title="Tạo VPC và chỉnh cấu hình" class="dd-item 
         
         
         
         ">
-      <a href="/workshopFCJ.io/vi/2-prerequiste/2.1-createec2/2.1.2-createpublicsubnet/">
-           <b> 2.1.2 </b> Tạo Public subnet
-          
-            <i class="fas fa-check read-icon"></i>
-          
-      </a>
-      
-              
-    </li>
-  
- 
+                  <a href="/workshopFCJ.io/vi/2-prerequiste/2.1-createec2/2.1.1-createvpc/">
+                    <b> 2.1.1 </b> Tạo VPC và chỉnh cấu hình
 
-            
-          
-            
-            
+                    <i class="fas fa-check read-icon"></i>
+
+                  </a>
+
+
+                </li>
 
 
 
 
- 
-  
-    
-    <li data-nav-id="/workshopFCJ.io/vi/2-prerequiste/2.1-createec2/2.1.3-createprivatesubnet/" title="Tạo EC2 Security Group" class="dd-item 
+
+
+
+
+
+
+
+
+
+
+                <li data-nav-id="/workshopFCJ.io/vi/2-prerequiste/2.1-createec2/2.1.2-createpublicsubnet/"
+                  title="Tạo Public subnet" class="dd-item 
         
         
         
         ">
-      <a href="/workshopFCJ.io/vi/2-prerequiste/2.1-createec2/2.1.3-createprivatesubnet/">
-           <b> 2.1.3 </b> Tạo EC2 Security Group
-          
-            <i class="fas fa-check read-icon"></i>
-          
-      </a>
-      
-              
-    </li>
-  
- 
+                  <a href="/workshopFCJ.io/vi/2-prerequiste/2.1-createec2/2.1.2-createpublicsubnet/">
+                    <b> 2.1.2 </b> Tạo Public subnet
 
-            
-          
-            
-            
+                    <i class="fas fa-check read-icon"></i>
+
+                  </a>
+
+
+                </li>
 
 
 
 
- 
-  
-    
-    <li data-nav-id="/workshopFCJ.io/vi/2-prerequiste/2.1-createec2/2.1.4-createsecgroup/" title="Tạo Security Group cho Amazon RDS" class="dd-item 
+
+
+
+
+
+
+
+
+
+
+                <li data-nav-id="/workshopFCJ.io/vi/2-prerequiste/2.1-createec2/2.1.3-createprivatesubnet/"
+                  title="Tạo EC2 Security Group" class="dd-item 
         
         
         
         ">
-      <a href="/workshopFCJ.io/vi/2-prerequiste/2.1-createec2/2.1.4-createsecgroup/">
-           <b> 2.1.4 </b> Tạo Security Group cho Amazon RDS
-          
-            <i class="fas fa-check read-icon"></i>
-          
-      </a>
-      
-              
-    </li>
-  
- 
+                  <a href="/workshopFCJ.io/vi/2-prerequiste/2.1-createec2/2.1.3-createprivatesubnet/">
+                    <b> 2.1.3 </b> Tạo EC2 Security Group
 
-            
-          
-        
-        </ul>
-              
-    </li>
-  
- 
+                    <i class="fas fa-check read-icon"></i>
 
-            
-          
-            
-            
+                  </a>
+
+
+                </li>
 
 
 
 
- 
-  
-    
-    <li data-nav-id="/workshopFCJ.io/vi/2-prerequiste/2.2-createiamrole/" title="Tạo SNS và IAM cho gửi Email" class="dd-item 
+
+
+
+
+
+
+
+
+
+
+                <li data-nav-id="/workshopFCJ.io/vi/2-prerequiste/2.1-createec2/2.1.4-createsecgroup/"
+                  title="Tạo Security Group cho Amazon RDS" class="dd-item 
         
         
         
         ">
-      <a href="/workshopFCJ.io/vi/2-prerequiste/2.2-createiamrole/">
-           <b> 2.2 </b> Tạo SNS và IAM cho gửi Email
-          
-            <i class="fas fa-check read-icon"></i>
-          
-      </a>
-      
-              
-    </li>
-  
- 
+                  <a href="/workshopFCJ.io/vi/2-prerequiste/2.1-createec2/2.1.4-createsecgroup/">
+                    <b> 2.1.4 </b> Tạo Security Group cho Amazon RDS
 
-            
-          
-        
-        </ul>
-              
-    </li>
-  
- 
+                    <i class="fas fa-check read-icon"></i>
 
-          
-          
+                  </a>
+
+
+                </li>
 
 
 
 
- 
-  
-    
-    <li data-nav-id="/workshopFCJ.io/vi/3-accessibilitytoinstances/" title="Tạo kết nối đến máy chủ EC2" class="dd-item 
-        
-        
-        
-        ">
-      <a href="/workshopFCJ.io/vi/3-accessibilitytoinstances/">
-           <b> 3. </b> Tạo kết nối đến máy chủ EC2
-          
-            <i class="fas fa-check read-icon"></i>
-          
-      </a>
-      
-              
-    </li>
-  
- 
 
-          
-          
+
+              </ul>
+
+            </li>
 
 
 
 
- 
-  
-    
-    <li data-nav-id="/workshopFCJ.io/vi/4-s3log/" title="Tạo RDS database và triển khai web" class="dd-item 
+
+
+
+
+
+
+
+
+
+
+            <li data-nav-id="/workshopFCJ.io/vi/2-prerequiste/2.2-createiamrole/" title="Tạo SNS và IAM cho gửi Email"
+              class="dd-item 
         
         
         
         ">
-      <a href="/workshopFCJ.io/vi/4-s3log/">
-           <b> 4. </b> Tạo RDS database và triển khai web
-          
+              <a href="/workshopFCJ.io/vi/2-prerequiste/2.2-createiamrole/">
+                <b> 2.2 </b> Tạo SNS và IAM cho gửi Email
+
+                <i class="fas fa-check read-icon"></i>
+
+              </a>
+
+
+            </li>
+
+
+
+
+
+
+          </ul>
+
+        </li>
+
+
+
+
+
+
+
+
+
+
+
+
+        <li data-nav-id="/workshopFCJ.io/vi/3-accessibilitytoinstances/" title="Tạo kết nối đến máy chủ EC2"
+          class="dd-item 
+        
+        
+        
+        ">
+          <a href="/workshopFCJ.io/vi/3-accessibilitytoinstances/">
+            <b> 3. </b> Tạo kết nối đến máy chủ EC2
+
             <i class="fas fa-check read-icon"></i>
-          
-      </a>
-      
-              
-    </li>
-  
- 
 
-          
-          
+          </a>
+
+
+        </li>
 
 
 
 
- 
-  
-    
-    <li data-nav-id="/workshopFCJ.io/vi/5-portfwd/" title="Tổng Quan và Cấu Hình AWS WAF ,cloudfront&#34;" class="dd-item 
+
+
+
+
+
+
+
+
+        <li data-nav-id="/workshopFCJ.io/vi/4-s3log/" title="Tạo RDS database và triển khai web" class="dd-item 
+        
+        
+        
+        ">
+          <a href="/workshopFCJ.io/vi/4-s3log/">
+            <b> 4. </b> Tạo RDS database và triển khai web
+
+            <i class="fas fa-check read-icon"></i>
+
+          </a>
+
+
+        </li>
+
+
+
+
+
+
+
+
+
+
+
+
+        <li data-nav-id="/workshopFCJ.io/vi/5-portfwd/" title="Tổng Quan và Cấu Hình AWS WAF ,cloudfront&#34;" class="dd-item 
         
         active
         
         ">
-      <a href="/workshopFCJ.io/vi/5-portfwd/">
-           <b> 5. </b> Tổng Quan và Cấu Hình AWS WAF ,cloudfront&#34;
-          
+          <a href="/workshopFCJ.io/vi/5-portfwd/">
+            <b> 5. </b> Tổng Quan và Cấu Hình AWS WAF ,cloudfront&#34;
+
             <i class="fas fa-check read-icon"></i>
-          
-      </a>
-      
-              
-    </li>
-  
- 
 
-          
-          
+          </a>
+
+
+        </li>
 
 
 
 
- 
-  
-    
-    <li data-nav-id="/workshopFCJ.io/vi/6-cleanu/" title="Graph Neural Networks với Neptune ML(chưa xong)" class="dd-item 
+
+
+
+
+
+
+
+
+        <li data-nav-id="/workshopFCJ.io/vi/6-cleanu/" title="Graph Neural Networks với Neptune ML(chưa xong)" class="dd-item 
         
         
         
         ">
-      <a href="/workshopFCJ.io/vi/6-cleanu/">
-          <b> 6. </b>Graph Neural Networks với Neptune ML(chưa xong)
-          
+          <a href="/workshopFCJ.io/vi/6-cleanu/">
+            <b> 6. </b>Graph Neural Networks với Neptune ML(chưa xong)
+
             <i class="fas fa-check read-icon"></i>
-          
-      </a>
-      
-              
-    </li>
-  
- 
 
-          
-          
+          </a>
+
+
+        </li>
 
 
 
 
- 
-  
-    
-    <li data-nav-id="/workshopFCJ.io/vi/7-clean/" title="Dọn dẹp" class="dd-item 
+
+
+
+
+
+
+
+
+        <li data-nav-id="/workshopFCJ.io/vi/7-clean/" title="Dọn dẹp" class="dd-item 
         
         
         
         ">
-      <a href="/workshopFCJ.io/vi/7-clean/">
-          <b> 7. </b>Dọn dẹp
-          
+          <a href="/workshopFCJ.io/vi/7-clean/">
+            <b> 7. </b>Dọn dẹp
+
             <i class="fas fa-check read-icon"></i>
-          
-      </a>
-      
-              
-    </li>
-  
- 
 
-          
-         
-    </ul>
+          </a>
 
-    
-    
+
+        </li>
+
+
+
+
+
+      </ul>
+
+
+
       <section id="shortcuts">
         <h3>More</h3>
         <ul>
-          
-              <li> 
-                  <a class="padding" href="https://www.facebook.com/groups/awsstudygroupfcj/"><i class='fab fa-facebook'></i> AWS Study Group</a>
-              </li>
-          
+
+          <li>
+            <a class="padding" href="https://www.facebook.com/groups/awsstudygroupfcj/"><i class='fab fa-facebook'></i>
+              AWS Study Group</a>
+          </li>
+
         </ul>
       </section>
-    
 
-    
-    <section id="prefooter">
-      <hr/>
-      <ul>
-      
-        <li>
-          <a class="padding">
-            <i class="fas fa-language fa-fw"></i>
-          <div class="select-style">
-            <select id="select-language" onchange="location = this.value;">
-          
-          
-          
-              
-              
-                  
-                    
-                    
-                      <option id="en" value="https://binh2401.github.io/workshopFCJ.io/5-portfwd/">English</option>
-                    
-                  
-              
-                  
-              
-          
-              
-              
-                  
-              
-                  
-                    
-                    
-                      <option id="vi" value="https://binh2401.github.io/workshopFCJ.io/vi/5-portfwd/" selected>Tiếng Việt</option>
-                    
-                  
-              
-          
-        </select>
-        <svg version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
-          width="255px" height="255px" viewBox="0 0 255 255" style="enable-background:new 0 0 255 255;" xml:space="preserve">
-          <g>
-            <g id="arrow-drop-down">
-              <polygon points="0,63.75 127.5,191.25 255,63.75 		" />
-            </g>
-          </g>
-        </svg>
-        </div>
-        </a>
-        </li>
-      
-      
-      
-        <li><a class="padding" href="#" data-clear-history-toggle=""><i class="fas fa-history fa-fw"></i> Clear History</a></li>
-      
-      </ul>
-    </section>
-    
-    <section id="footer">
-      <left>
-    
-     <b> Workshop</b> <br>
-    <img src="https://hitwebcounter.com/counter/counter.php?page=7920860&style=0038&nbdigits=9&type=page&initCount=0" title="Migrate" Alt="web counter"   border="0" /></a>  <br>
-     <b> <a href="https://cloudjourney.awsstudygroup.com/">Cloud Journey</a></b> <br>
-    <img src="https://hitwebcounter.com/counter/counter.php?page=7830807&style=0038&nbdigits=9&type=page&initCount=0" title="Total CLoud Journey" Alt="web counter"   border="0"   />
-     
-</left>
-<left>
-    <br>
-    <br>
-        <b> Last Updated </b> <br>
-        <i><font color=orange>30-01-2022</font></i>
-    </left>
-    <left>
-        <br>
-        <br>
-            <b> Team </b> <br>
-           
-            <i> <a href="https://www.linkedin.com/in/sutrinh/"  style="color:orange">Sử Trịnh  </a> <br>
-                <a href="https://www.linkedin.com/in/jotaguy"  style="color:orange">Gia Hưng </a> <br>
-                <a href="https://www.linkedin.com/in/hiepnguyendt"  style="color:orange">Thanh Hiệp </a>
-               
-        </i>
+
+
+      <section id="prefooter">
+        <hr />
+        <ul>
+
+          <li>
+            <a class="padding">
+              <i class="fas fa-language fa-fw"></i>
+              <div class="select-style">
+                <select id="select-language" onchange="location = this.value;">
+
+
+
+
+
+
+
+
+                  <option id="en" value="https://binh2401.github.io/workshopFCJ.io/5-portfwd/">English</option>
+
+
+
+
+
+
+
+
+
+
+
+
+
+                  <option id="vi" value="https://binh2401.github.io/workshopFCJ.io/vi/5-portfwd/" selected>Tiếng Việt
+                  </option>
+
+
+
+
+                </select>
+                <svg version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg"
+                  xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="255px" height="255px"
+                  viewBox="0 0 255 255" style="enable-background:new 0 0 255 255;" xml:space="preserve">
+                  <g>
+                    <g id="arrow-drop-down">
+                      <polygon points="0,63.75 127.5,191.25 255,63.75 		" />
+                    </g>
+                  </g>
+                </svg>
+              </div>
+            </a>
+          </li>
+
+
+
+          <li><a class="padding" href="#" data-clear-history-toggle=""><i class="fas fa-history fa-fw"></i> Clear
+              History</a></li>
+
+        </ul>
+      </section>
+
+      <section id="footer">
+        <left>
+
+          <b> Workshop</b> <br>
+          <img
+            src="https://hitwebcounter.com/counter/counter.php?page=7920860&style=0038&nbdigits=9&type=page&initCount=0"
+            title="Migrate" Alt="web counter" border="0" /></a> <br>
+          <b> <a href="https://cloudjourney.awsstudygroup.com/">Cloud Journey</a></b> <br>
+          <img
+            src="https://hitwebcounter.com/counter/counter.php?page=7830807&style=0038&nbdigits=9&type=page&initCount=0"
+            title="Total CLoud Journey" Alt="web counter" border="0" />
+
+        </left>
+        <left>
+          <br>
+          <br>
+          <b> Last Updated </b> <br>
+          <i>
+            <font color=orange>30-01-2022</font>
+          </i>
+        </left>
+        <left>
+          <br>
+          <br>
+          <b> Team </b> <br>
+
+          <i> <a href="https://www.linkedin.com/in/sutrinh/" style="color:orange">Sử Trịnh </a> <br>
+            <a href="https://www.linkedin.com/in/jotaguy" style="color:orange">Gia Hưng </a> <br>
+            <a href="https://www.linkedin.com/in/hiepnguyendt" style="color:orange">Thanh Hiệp </a>
+
+          </i>
         </left>
 
-<script async defer src="https://buttons.github.io/buttons.js"></script>
+        <script async defer src="https://buttons.github.io/buttons.js"></script>
 
-    </section>
-  </div>
-</nav>
-
-
-
-
-        <section id="body">
-        <div id="overlay"></div>
-        <div class="padding highlightable">
-              
-              <div>
-                <div id="top-bar">
-                
-                
-                <div id="breadcrumbs" itemscope="" itemtype="http://data-vocabulary.org/Breadcrumb">
-                    <span id="sidebar-toggle-span">
-                        <a href="#" id="sidebar-toggle" data-sidebar-toggle="">
-                          <i class="fas fa-bars"></i>
-                        </a>
-                    </span>
-                  
-                  <span id="toc-menu"><i class="fas fa-list-alt"></i></span>
-                  
-                  <span class="links">
-                 
-                 
-                    
-          
-          
-            
-            
-          
-          
-            <a href='/workshopFCJ.io/vi/'>Xây dựng hệ thống bán sách trực tuyến triển khai trên AWS</a> > Tổng Quan và Cấu Hình AWS WAF ,cloudfront"
-          
-        
-          
-        
-                 
-                  </span>
-                </div>
-                
-                    <div class="progress">
-    <div class="wrapper">
-<nav id="TableOfContents">
-  <ul>
-    <li><a href="#-ii-các-bước-cấu-hình-aws-waf">🛠️ II. Các bước cấu hình AWS WAF</a>
-      <ul>
-        <li></li>
-        <li><a href="#1-tạo-web-acl-access-control-list">1. Tạo Web ACL (Access Control List)</a></li>
-        <li><a href="#2-chọn-tài-nguyên-cần-bảo-vệ">2. Chọn tài nguyên cần bảo vệ</a></li>
-        <li><a href="#3-thêm-các-rule-vào-web-acl">3. Thêm các Rule vào Web ACL</a></li>
-        <li><a href="#4-cấu-hình-hành-động-cho-mỗi-rule">4. Cấu hình hành động cho mỗi Rule</a></li>
-        <li><a href="#5-gắn-web-acl-với-resource">5. Gắn Web ACL với Resource</a></li>
-      </ul>
-    </li>
-  </ul>
-
-  <ul>
-    <li><a href="#-mục-tiêu">✅ Mục tiêu</a></li>
-    <li><a href="#-yêu-cầu">🧰 Yêu cầu</a></li>
-    <li><a href="#-bước-1-cài-đặt-gói-aws-logger">🔧 Bước 1: Cài đặt gói AWS Logger</a></li>
-    <li><a href="#-bước-2-cấu-hình-appsettingsjson">⚙️ Bước 2: Cấu hình <code>appsettings.json</code></a></li>
-    <li><a href="#-bước-3-cấu-hình-logger-trong-mã-nguồn">🧬 Bước 3: Cấu hình logger trong mã nguồn</a>
-      <ul>
-        <li><a href="#-đối-với-aspnet-core-mvc-net-6-trở-lên">✅ Đối với ASP.NET Core MVC (.NET 6 trở lên):</a></li>
-      </ul>
-    </li>
-    <li><a href="#-bước-4-cấu-hình-quyền-truy-cập-aws">🔐 Bước 4: Cấu hình quyền truy cập AWS</a>
-      <ul>
-        <li><a href="#-nếu-chạy-trên-ec2">👉 Nếu chạy trên EC2:</a></li>
-        <li><a href="#-nếu-chạy-local-dev">👉 Nếu chạy local (dev):</a></li>
-      </ul>
-    </li>
-    <li><a href="#-bước-5-thêm-dòng-ghi-log-trong-controller">🧪 Bước 5: Thêm dòng ghi log trong controller</a></li>
-    <li><a href="#-bước-6-kiểm-tra-log-trên-aws">📊 Bước 6: Kiểm tra log trên AWS</a></li>
-    <li><a href="#-ghi-chú-thêm">🧩 Ghi chú thêm</a></li>
-  </ul>
-</nav>
+      </section>
     </div>
-</div>
+  </nav>
 
-                
-              </div>
+
+
+
+  <section id="body">
+    <div id="overlay"></div>
+    <div class="padding highlightable">
+
+      <div>
+        <div id="top-bar">
+
+
+          <div id="breadcrumbs" itemscope="" itemtype="http://data-vocabulary.org/Breadcrumb">
+            <span id="sidebar-toggle-span">
+              <a href="#" id="sidebar-toggle" data-sidebar-toggle="">
+                <i class="fas fa-bars"></i>
+              </a>
+            </span>
+
+            <span id="toc-menu"><i class="fas fa-list-alt"></i></span>
+
+            <span class="links">
+
+
+
+
+
+
+
+
+
+              <a href='/workshopFCJ.io/vi/'>Xây dựng hệ thống bán sách trực tuyến triển khai trên AWS</a> > Tổng Quan và
+              Cấu Hình AWS WAF ,cloudfront"
+
+
+
+
+
+            </span>
+          </div>
+
+          <div class="progress">
+            <div class="wrapper">
+              <nav id="TableOfContents">
+                <ul>
+                  <li><a href="#-ii-các-bước-cấu-hình-aws-waf">🛠️ II. Các bước cấu hình AWS WAF</a>
+                    <ul>
+                      <li></li>
+                      <li><a href="#1-tạo-web-acl-access-control-list">1. Tạo Web ACL (Access Control List)</a></li>
+                      <li><a href="#2-chọn-tài-nguyên-cần-bảo-vệ">2. Chọn tài nguyên cần bảo vệ</a></li>
+                      <li><a href="#3-thêm-các-rule-vào-web-acl">3. Thêm các Rule vào Web ACL</a></li>
+                      <li><a href="#4-cấu-hình-hành-động-cho-mỗi-rule">4. Cấu hình hành động cho mỗi Rule</a></li>
+                      <li><a href="#5-gắn-web-acl-với-resource">5. Gắn Web ACL với Resource</a></li>
+                    </ul>
+                  </li>
+                </ul>
+
+                <ul>
+                  <li><a href="#-mục-tiêu">✅ Mục tiêu</a></li>
+                  <li><a href="#-yêu-cầu">🧰 Yêu cầu</a></li>
+                  <li><a href="#-bước-1-cài-đặt-gói-aws-logger">🔧 Bước 1: Cài đặt gói AWS Logger</a></li>
+                  <li><a href="#-bước-2-cấu-hình-appsettingsjson">⚙️ Bước 2: Cấu hình <code>appsettings.json</code></a>
+                  </li>
+                  <li><a href="#-bước-3-cấu-hình-logger-trong-mã-nguồn">🧬 Bước 3: Cấu hình logger trong mã nguồn</a>
+                    <ul>
+                      <li><a href="#-đối-với-aspnet-core-mvc-net-6-trở-lên">✅ Đối với ASP.NET Core MVC (.NET 6 trở
+                          lên):</a></li>
+                    </ul>
+                  </li>
+                  <li><a href="#-bước-4-cấu-hình-quyền-truy-cập-aws">🔐 Bước 4: Cấu hình quyền truy cập AWS</a>
+                    <ul>
+                      <li><a href="#-nếu-chạy-trên-ec2">👉 Nếu chạy trên EC2:</a></li>
+                      <li><a href="#-nếu-chạy-local-dev">👉 Nếu chạy local (dev):</a></li>
+                    </ul>
+                  </li>
+                  <li><a href="#-bước-5-thêm-dòng-ghi-log-trong-controller">🧪 Bước 5: Thêm dòng ghi log trong
+                      controller</a></li>
+                  <li><a href="#-bước-6-kiểm-tra-log-trên-aws">📊 Bước 6: Kiểm tra log trên AWS</a></li>
+                  <li><a href="#-ghi-chú-thêm">🧩 Ghi chú thêm</a></li>
+                </ul>
+              </nav>
             </div>
-            
-        <div id="head-tags">
-        
+          </div>
+
+
         </div>
-        
-        <div id="body-inner">
-          
-            <h1>
-              
-              Tổng Quan và Cấu Hình AWS WAF ,cloudfront&#34;
-            </h1>
-          
+      </div>
 
-        
+      <div id="head-tags">
+
+      </div>
+
+      <div id="body-inner">
+
+        <h1>
+
+          Tổng Quan và Cấu Hình AWS WAF ,cloudfront&#34;
+        </h1>
 
 
 
-	<h1 id="-i-tổng-quan-aws-waf">🔐 I. Tổng quan AWS WAF</h1>
-<p><strong>AWS WAF (Web Application Firewall)</strong> là dịch vụ tường lửa ứng dụng web giúp bảo vệ website hoặc API khỏi các mối đe dọa phổ biến như:</p>
-<ul>
-<li>SQL Injection</li>
-<li>Cross-Site Scripting (XSS)</li>
-<li>Tấn công DDoS (khi kết hợp với <strong>AWS Shield</strong>)</li>
-<li>Các request bất thường (dựa trên IP, quốc gia, header,&hellip;)</li>
-</ul>
-<hr>
-<h2 id="-ii-các-bước-cấu-hình-aws-waf">🛠️ II. Các bước cấu hình AWS WAF</h2>
-<h4 id="1-tạo-application-load-balancer-alb">1. Tạo Application Load Balancer (ALB)</h4>
-<ul>
-<li>Vào <strong>EC2 Console</strong> → <strong>Load Balancers</strong> → <strong>Create Load Balancer</strong>
-<img alt="FWD" src="/images/5.fwd/waf3.png"></li>
-<li>Chọn loại: <strong>Application Load Balancer</strong></li>
-<li>Cấu hình:
-<ul>
-<li>Đặt tên ALB</li>
-<li>Chọn schema: Internet-facing (nếu website public)</li>
-<li>Chọn VPC, Subnet</li>
-<li>Cấu hình security group mở port 80/443
-<img alt="FWD" src="/images/5.fwd/waf4.png"></li>
-</ul>
-</li>
-</ul>
-<h4 id="tạo-target-group">Tạo Target Group</h4>
-<ul>
-<li>Trong quá trình tạo ALB, chọn <strong>Create a new target group</strong>
-<img alt="FWD" src="/images/5.fwd/waf8.png"></li>
-<li>Loại target: <strong>Instance</strong></li>
-<li>Chọn protocol: <strong>HTTP hoặc HTTPS</strong></li>
-<li>Thêm các <strong>EC2 instances</strong> đang chạy website vào target group
-<img alt="FWD" src="/images/5.fwd/waf5.png">
-<img alt="FWD" src="/images/5.fwd/waf6.png">
-<img alt="FWD" src="/images/5.fwd/waf7.png"></li>
-</ul>
-<p><img alt="FWD" src="/images/5.fwd/waf9.png">
-<img alt="FWD" src="/images/5.fwd/waf10.png">
-<img alt="FWD" src="/images/5.fwd/waf11.png"></p>
-<h4 id="3-gắn-aws-waf-vào-alb">3. Gắn AWS WAF vào ALB</h4>
-<ul>
-<li>Truy cập <strong>AWS WAF &amp; Shield</strong></li>
-<li>Chọn <strong>Web ACLs</strong> → <strong>Create Web ACL</strong></li>
-<li>Tại bước <strong>Association</strong>, chọn ALB bạn vừa tạo</li>
-</ul>
-<h3 id="1-tạo-web-acl-access-control-list">1. Tạo Web ACL (Access Control List)</h3>
-<ul>
-<li>Truy cập <strong>AWS Console</strong> → Tìm <strong>WAF &amp; Shield</strong>
-<img alt="FWD" src="/images/5.fwd/image.png"></li>
-<li>Chọn <strong>Web ACLs</strong> → <strong>Create web ACL</strong>
-<img alt="FWD" src="/images/5.fwd/waf1.png"></li>
-<li>Đặt tên, chọn <strong>Region</strong> nếu sử dụng <strong>ALB</strong>, hoặc <strong>CloudFront</strong> nếu sử dụng CDN.
-<img alt="FWD" src="/images/5.fwd/waf2.png"></li>
-</ul>
-<p><img alt="FWD" src="/images/5.fwd/waf12.png"></p>
-<h3 id="2-chọn-tài-nguyên-cần-bảo-vệ">2. Chọn tài nguyên cần bảo vệ</h3>
-<ul>
-<li>Gắn Web ACL với một trong các dịch vụ:
-<ul>
-<li><strong>Application Load Balancer (ALB)</strong></li>
-<li><strong>Amazon API Gateway</strong></li>
-<li><strong>Amazon CloudFront</strong> (Khuyến khích nếu website phục vụ toàn cầu)</li>
-</ul>
-</li>
-</ul>
-<h3 id="3-thêm-các-rule-vào-web-acl">3. Thêm các Rule vào Web ACL</h3>
-<p>Bạn có thể chọn:</p>
-<h4 id="-managed-rule-groups-của-aws">✅ Managed Rule Groups của AWS:</h4>
-<p><img alt="FWD" src="/images/5.fwd/waf13.png"></p>
-<p><img alt="FWD" src="/images/5.fwd/waf14.png"></p>
-<h3 id="4-cấu-hình-hành-động-cho-mỗi-rule">4. Cấu hình hành động cho mỗi Rule</h3>
-<ul>
-<li><code>Allow</code>: Cho phép</li>
-<li><code>Block</code>: Chặn</li>
-<li><code>Count</code>: Ghi nhận nhưng không chặn (giúp kiểm thử trước khi áp dụng thực tế)</li>
-</ul>
-<h3 id="5-gắn-web-acl-với-resource">5. Gắn Web ACL với Resource</h3>
-<p>Sau khi tạo Web ACL, bạn gắn nó với tài nguyên cần bảo vệ:</p>
-<p>Client → CloudFront (gắn AWS WAF) → ALB → EC2/Laragon (.NET App)
-<img alt="FWD" src="/images/5.fwd/waf15.png">
-<img alt="FWD" src="/images/5.fwd/waf16.png"></p>
-<h1 id="tích-hợp-aws-cloudwatch-vào-ứng-dụng-aspnet-mvc">Tích hợp AWS CloudWatch vào ứng dụng ASP.NET MVC</h1>
-<h2 id="-mục-tiêu">✅ Mục tiêu</h2>
-<ul>
-<li>Ghi log lỗi, log hệ thống từ <strong>ASP.NET MVC</strong> lên <strong>AWS CloudWatch Logs</strong></li>
-<li>Tự động tạo Log Group/Stream nếu chưa có</li>
-<li>Không cần cài CloudWatch Agent</li>
-</ul>
-<hr>
-<h2 id="-yêu-cầu">🧰 Yêu cầu</h2>
-<ul>
-<li>Ứng dụng ASP.NET MVC (Core hoặc .NET Framework)</li>
-<li>Tài khoản AWS và IAM user có quyền ghi CloudWatch Logs</li>
-</ul>
-<hr>
-<h2 id="-bước-1-cài-đặt-gói-aws-logger">🔧 Bước 1: Cài đặt gói AWS Logger</h2>
-<p>Mở terminal hoặc Package Manager Console và chạy:</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>dotnet add package AWS.Logger.AspNetCore
-</span></span></code></pre></div><blockquote>
-<p>Nếu bạn dùng .NET Framework MVC cũ, thay vào đó dùng:<br>
-<code>AWS.Logger.Log4Net</code> hoặc <code>AWS.Logger.NLog</code> tuỳ theo hệ thống logging bạn sử dụng.</p>
-</blockquote>
-<hr>
-<h2 id="-bước-2-cấu-hình-appsettingsjson">⚙️ Bước 2: Cấu hình <code>appsettings.json</code></h2>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-json" data-lang="json"><span style="display:flex;"><span>{
+
+
+
+        <h1 id="-i-tổng-quan-aws-waf">🔐 I. Tổng quan AWS WAF</h1>
+        <p><strong>AWS WAF (Web Application Firewall)</strong> là dịch vụ tường lửa ứng dụng web giúp bảo vệ website
+          hoặc API khỏi các mối đe dọa phổ biến như:</p>
+        <ul>
+          <li>SQL Injection</li>
+          <li>Cross-Site Scripting (XSS)</li>
+          <li>Tấn công DDoS (khi kết hợp với <strong>AWS Shield</strong>)</li>
+          <li>Các request bất thường (dựa trên IP, quốc gia, header,&hellip;)</li>
+        </ul>
+        <hr>
+        <h2 id="-ii-các-bước-cấu-hình-aws-waf">🛠️ II. Các bước cấu hình AWS WAF</h2>
+        <h4 id="1-tạo-application-load-balancer-alb">1. Tạo Application Load Balancer (ALB)</h4>
+        <ul>
+          <li>Vào <strong>EC2 Console</strong> → <strong>Load Balancers</strong> → <strong>Create Load Balancer</strong>
+            <img alt="FWD" src="/workshopFCJ.io/images/5.fwd/waf3.png">
+          </li>
+          <li>Chọn loại: <strong>Application Load Balancer</strong></li>
+          <li>Cấu hình:
+            <ul>
+              <li>Đặt tên ALB</li>
+              <li>Chọn schema: Internet-facing (nếu website public)</li>
+              <li>Chọn VPC, Subnet</li>
+              <li>Cấu hình security group mở port 80/443
+                <img alt="FWD" src="/workshopFCJ.io/images/5.fwd/waf4.png">
+              </li>
+            </ul>
+          </li>
+        </ul>
+        <h4 id="tạo-target-group">Tạo Target Group</h4>
+        <ul>
+          <li>Trong quá trình tạo ALB, chọn <strong>Create a new target group</strong>
+            <img alt="FWD" src="/workshopFCJ.io/images/5.fwd/waf8.png">
+          </li>
+          <li>Loại target: <strong>Instance</strong></li>
+          <li>Chọn protocol: <strong>HTTP hoặc HTTPS</strong></li>
+          <li>Thêm các <strong>EC2 instances</strong> đang chạy website vào target group
+            <img alt="FWD" src="/workshopFCJ.io/images/5.fwd/waf5.png">
+            <img alt="FWD" src="/workshopFCJ.io/images/5.fwd/waf6.png">
+            <img alt="FWD" src="/workshopFCJ.io/images/5.fwd/waf7.png">
+          </li>
+        </ul>
+        <p><img alt="FWD" src="/workshopFCJ.io/images/5.fwd/waf9.png">
+          <img alt="FWD" src="/workshopFCJ.io/images/5.fwd/waf10.png">
+          <img alt="FWD" src="/workshopFCJ.io/images/5.fwd/waf11.png">
+        </p>
+        <h4 id="3-gắn-aws-waf-vào-alb">3. Gắn AWS WAF vào ALB</h4>
+        <ul>
+          <li>Truy cập <strong>AWS WAF &amp; Shield</strong></li>
+          <li>Chọn <strong>Web ACLs</strong> → <strong>Create Web ACL</strong></li>
+          <li>Tại bước <strong>Association</strong>, chọn ALB bạn vừa tạo</li>
+        </ul>
+        <h3 id="1-tạo-web-acl-access-control-list">1. Tạo Web ACL (Access Control List)</h3>
+        <ul>
+          <li>Truy cập <strong>AWS Console</strong> → Tìm <strong>WAF &amp; Shield</strong>
+            <img alt="FWD" src="/workshopFCJ.io/images/5.fwd/image.png">
+          </li>
+          <li>Chọn <strong>Web ACLs</strong> → <strong>Create web ACL</strong>
+            <img alt="FWD" src="/workshopFCJ.io/images/5.fwd/waf1.png">
+          </li>
+          <li>Đặt tên, chọn <strong>Region</strong> nếu sử dụng <strong>ALB</strong>, hoặc <strong>CloudFront</strong>
+            nếu sử dụng CDN.
+            <img alt="FWD" src="/workshopFCJ.io/images/5.fwd/waf2.png">
+          </li>
+        </ul>
+        <p><img alt="FWD" src="/workshopFCJ.io/images/5.fwd/waf12.png"></p>
+        <h3 id="2-chọn-tài-nguyên-cần-bảo-vệ">2. Chọn tài nguyên cần bảo vệ</h3>
+        <ul>
+          <li>Gắn Web ACL với một trong các dịch vụ:
+            <ul>
+              <li><strong>Application Load Balancer (ALB)</strong></li>
+              <li><strong>Amazon API Gateway</strong></li>
+              <li><strong>Amazon CloudFront</strong> (Khuyến khích nếu website phục vụ toàn cầu)</li>
+            </ul>
+          </li>
+        </ul>
+        <h3 id="3-thêm-các-rule-vào-web-acl">3. Thêm các Rule vào Web ACL</h3>
+        <p>Bạn có thể chọn:</p>
+        <h4 id="-managed-rule-groups-của-aws">✅ Managed Rule Groups của AWS:</h4>
+        <p><img alt="FWD" src="/workshopFCJ.io/images/5.fwd/waf13.png"></p>
+        <p><img alt="FWD" src="/workshopFCJ.io/images/5.fwd/waf14.png"></p>
+        <h3 id="4-cấu-hình-hành-động-cho-mỗi-rule">4. Cấu hình hành động cho mỗi Rule</h3>
+        <ul>
+          <li><code>Allow</code>: Cho phép</li>
+          <li><code>Block</code>: Chặn</li>
+          <li><code>Count</code>: Ghi nhận nhưng không chặn (giúp kiểm thử trước khi áp dụng thực tế)</li>
+        </ul>
+        <h3 id="5-gắn-web-acl-với-resource">5. Gắn Web ACL với Resource</h3>
+        <p>Sau khi tạo Web ACL, bạn gắn nó với tài nguyên cần bảo vệ:</p>
+        <p>Client → CloudFront (gắn AWS WAF) → ALB → EC2/Laragon (.NET App)
+          <img alt="FWD" src="/workshopFCJ.io/images/5.fwd/waf15.png">
+          <img alt="FWD" src="/workshopFCJ.io/images/5.fwd/waf16.png">
+        </p>
+        <h1 id="tích-hợp-aws-cloudwatch-vào-ứng-dụng-aspnet-mvc">Tích hợp AWS CloudWatch vào ứng dụng ASP.NET MVC</h1>
+        <h2 id="-mục-tiêu">✅ Mục tiêu</h2>
+        <ul>
+          <li>Ghi log lỗi, log hệ thống từ <strong>ASP.NET MVC</strong> lên <strong>AWS CloudWatch Logs</strong></li>
+          <li>Tự động tạo Log Group/Stream nếu chưa có</li>
+          <li>Không cần cài CloudWatch Agent</li>
+        </ul>
+        <hr>
+        <h2 id="-yêu-cầu">🧰 Yêu cầu</h2>
+        <ul>
+          <li>Ứng dụng ASP.NET MVC (Core hoặc .NET Framework)</li>
+          <li>Tài khoản AWS và IAM user có quyền ghi CloudWatch Logs</li>
+        </ul>
+        <hr>
+        <h2 id="-bước-1-cài-đặt-gói-aws-logger">🔧 Bước 1: Cài đặt gói AWS Logger</h2>
+        <p>Mở terminal hoặc Package Manager Console và chạy:</p>
+        <div class="highlight">
+          <pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>dotnet add package AWS.Logger.AspNetCore
+</span></span></code></pre>
+        </div>
+        <blockquote>
+          <p>Nếu bạn dùng .NET Framework MVC cũ, thay vào đó dùng:<br>
+            <code>AWS.Logger.Log4Net</code> hoặc <code>AWS.Logger.NLog</code> tuỳ theo hệ thống logging bạn sử dụng.
+          </p>
+        </blockquote>
+        <hr>
+        <h2 id="-bước-2-cấu-hình-appsettingsjson">⚙️ Bước 2: Cấu hình <code>appsettings.json</code></h2>
+        <div class="highlight">
+          <pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-json" data-lang="json"><span style="display:flex;"><span>{
 </span></span><span style="display:flex;"><span>  <span style="color:#f92672">&#34;AWS&#34;</span>: {
 </span></span><span style="display:flex;"><span>    <span style="color:#f92672">&#34;Region&#34;</span>: <span style="color:#e6db74">&#34;ap-southeast-1&#34;</span>,
 </span></span><span style="display:flex;"><span>    <span style="color:#f92672">&#34;LogGroup&#34;</span>: <span style="color:#e6db74">&#34;MvcAppLogGroup&#34;</span>
@@ -770,11 +831,14 @@
 </span></span><span style="display:flex;"><span>    }
 </span></span><span style="display:flex;"><span>  }
 </span></span><span style="display:flex;"><span>}
-</span></span></code></pre></div><hr>
-<h2 id="-bước-3-cấu-hình-logger-trong-mã-nguồn">🧬 Bước 3: Cấu hình logger trong mã nguồn</h2>
-<h3 id="-đối-với-aspnet-core-mvc-net-6-trở-lên">✅ Đối với ASP.NET Core MVC (.NET 6 trở lên):</h3>
-<p>Sửa file <code>Program.cs</code>:</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-csharp" data-lang="csharp"><span style="display:flex;"><span><span style="color:#66d9ef">using</span> AWS.Logger.AspNetCore;
+</span></span></code></pre>
+        </div>
+        <hr>
+        <h2 id="-bước-3-cấu-hình-logger-trong-mã-nguồn">🧬 Bước 3: Cấu hình logger trong mã nguồn</h2>
+        <h3 id="-đối-với-aspnet-core-mvc-net-6-trở-lên">✅ Đối với ASP.NET Core MVC (.NET 6 trở lên):</h3>
+        <p>Sửa file <code>Program.cs</code>:</p>
+        <div class="highlight">
+          <pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-csharp" data-lang="csharp"><span style="display:flex;"><span><span style="color:#66d9ef">using</span> AWS.Logger.AspNetCore;
 </span></span><span style="display:flex;"><span>
 </span></span><span style="display:flex;"><span><span style="color:#66d9ef">var</span> builder = WebApplication.CreateBuilder(args);
 </span></span><span style="display:flex;"><span>
@@ -787,11 +851,14 @@
 </span></span><span style="display:flex;"><span>app.UseAuthorization();
 </span></span><span style="display:flex;"><span>app.MapDefaultControllerRoute();
 </span></span><span style="display:flex;"><span>app.Run();
-</span></span></code></pre></div><hr>
-<h2 id="-bước-4-cấu-hình-quyền-truy-cập-aws">🔐 Bước 4: Cấu hình quyền truy cập AWS</h2>
-<h3 id="-nếu-chạy-trên-ec2">👉 Nếu chạy trên EC2:</h3>
-<p>Gán IAM Role cho EC2 instance với quyền:</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-json" data-lang="json"><span style="display:flex;"><span>{
+</span></span></code></pre>
+        </div>
+        <hr>
+        <h2 id="-bước-4-cấu-hình-quyền-truy-cập-aws">🔐 Bước 4: Cấu hình quyền truy cập AWS</h2>
+        <h3 id="-nếu-chạy-trên-ec2">👉 Nếu chạy trên EC2:</h3>
+        <p>Gán IAM Role cho EC2 instance với quyền:</p>
+        <div class="highlight">
+          <pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-json" data-lang="json"><span style="display:flex;"><span>{
 </span></span><span style="display:flex;"><span>  <span style="color:#f92672">&#34;Effect&#34;</span>: <span style="color:#e6db74">&#34;Allow&#34;</span>,
 </span></span><span style="display:flex;"><span>  <span style="color:#f92672">&#34;Action&#34;</span>: [
 </span></span><span style="display:flex;"><span>    <span style="color:#e6db74">&#34;logs:CreateLogGroup&#34;</span>,
@@ -800,14 +867,20 @@
 </span></span><span style="display:flex;"><span>  ],
 </span></span><span style="display:flex;"><span>  <span style="color:#f92672">&#34;Resource&#34;</span>: <span style="color:#e6db74">&#34;*&#34;</span>
 </span></span><span style="display:flex;"><span>}
-</span></span></code></pre></div><h3 id="-nếu-chạy-local-dev">👉 Nếu chạy local (dev):</h3>
-<p>Tạo file <code>~/.aws/credentials</code> hoặc <code>C:\Users\&lt;tên user&gt;\.aws\credentials</code>:</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-ini" data-lang="ini"><span style="display:flex;"><span><span style="color:#66d9ef">[default]</span>
+</span></span></code></pre>
+        </div>
+        <h3 id="-nếu-chạy-local-dev">👉 Nếu chạy local (dev):</h3>
+        <p>Tạo file <code>~/.aws/credentials</code> hoặc <code>C:\Users\&lt;tên user&gt;\.aws\credentials</code>:</p>
+        <div class="highlight">
+          <pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-ini" data-lang="ini"><span style="display:flex;"><span><span style="color:#66d9ef">[default]</span>
 </span></span><span style="display:flex;"><span><span style="color:#a6e22e">aws_access_key_id</span> <span style="color:#f92672">=</span> <span style="color:#e6db74">YOUR_ACCESS_KEY</span>
 </span></span><span style="display:flex;"><span><span style="color:#a6e22e">aws_secret_access_key</span> <span style="color:#f92672">=</span> <span style="color:#e6db74">YOUR_SECRET_KEY</span>
-</span></span></code></pre></div><hr>
-<h2 id="-bước-5-thêm-dòng-ghi-log-trong-controller">🧪 Bước 5: Thêm dòng ghi log trong controller</h2>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-csharp" data-lang="csharp"><span style="display:flex;"><span><span style="color:#66d9ef">private</span> <span style="color:#66d9ef">readonly</span> ILogger&lt;HomeController&gt; _logger;
+</span></span></code></pre>
+        </div>
+        <hr>
+        <h2 id="-bước-5-thêm-dòng-ghi-log-trong-controller">🧪 Bước 5: Thêm dòng ghi log trong controller</h2>
+        <div class="highlight">
+          <pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-csharp" data-lang="csharp"><span style="display:flex;"><span><span style="color:#66d9ef">private</span> <span style="color:#66d9ef">readonly</span> ILogger&lt;HomeController&gt; _logger;
 </span></span><span style="display:flex;"><span>
 </span></span><span style="display:flex;"><span><span style="color:#66d9ef">public</span> HomeController(ILogger&lt;HomeController&gt; logger)
 </span></span><span style="display:flex;"><span>{
@@ -819,322 +892,333 @@
 </span></span><span style="display:flex;"><span>    _logger.LogInformation(<span style="color:#e6db74">&#34;Trang chủ được truy cập lúc &#34;</span> + DateTime.Now);
 </span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">return</span> View();
 </span></span><span style="display:flex;"><span>}
-</span></span></code></pre></div><hr>
-<h2 id="-bước-6-kiểm-tra-log-trên-aws">📊 Bước 6: Kiểm tra log trên AWS</h2>
-<ol>
-<li>Truy cập <strong>AWS Console &gt; CloudWatch &gt; Log groups</strong></li>
-<li>Chọn <code>MvcAppLogGroup</code></li>
-<li>Chọn log stream để xem chi tiết</li>
-</ol>
-<hr>
-<h2 id="-ghi-chú-thêm">🧩 Ghi chú thêm</h2>
-<ul>
-<li>Bạn có thể dùng thêm <code>AWS X-Ray</code> để trace hiệu năng request nếu ứng dụng phức tạp.</li>
-<li>Có thể tích hợp <code>LogLevel</code>, <code>EventID</code>, <code>Exception</code> để có log chi tiết hơn.</li>
-</ul>
-<hr>
-<p><strong>Chúc bạn triển khai thành công!</strong> Nếu bạn cần bản mẫu cho .NET Framework MVC hoặc muốn cấu hình ghi log nâng cao, hãy để lại bình luận hoặc liên hệ.</p>
+</span></span></code></pre>
+        </div>
+        <hr>
+        <h2 id="-bước-6-kiểm-tra-log-trên-aws">📊 Bước 6: Kiểm tra log trên AWS</h2>
+        <ol>
+          <li>Truy cập <strong>AWS Console &gt; CloudWatch &gt; Log groups</strong></li>
+          <li>Chọn <code>MvcAppLogGroup</code></li>
+          <li>Chọn log stream để xem chi tiết</li>
+        </ol>
+        <hr>
+        <h2 id="-ghi-chú-thêm">🧩 Ghi chú thêm</h2>
+        <ul>
+          <li>Bạn có thể dùng thêm <code>AWS X-Ray</code> để trace hiệu năng request nếu ứng dụng phức tạp.</li>
+          <li>Có thể tích hợp <code>LogLevel</code>, <code>EventID</code>, <code>Exception</code> để có log chi tiết
+            hơn.</li>
+        </ul>
+        <hr>
+        <p><strong>Chúc bạn triển khai thành công!</strong> Nếu bạn cần bản mẫu cho .NET Framework MVC hoặc muốn cấu
+          hình ghi log nâng cao, hãy để lại bình luận hoặc liên hệ.</p>
 
 
 
 
 
-<footer class=" footline" >
-	
-</footer>
+        <footer class=" footline">
 
-        
-        </div> 
-        
+        </footer>
+
 
       </div>
 
+
+    </div>
+
     <div id="navigation">
-        
-        
-        
-        
-            
-            
-                
-                    
-                    
-                
-                
-
-                    
-                    
-                        
-                    
-                    
-
-                    
-                        
-            
-            
-                
-                    
-                        
-                        
-                    
-                
-                
-
-                    
-                    
-                    
-
-                    
-            
-        
-                    
-                        
-            
-            
-                
-                    
-                
-                
-
-                    
-                    
-                        
-                    
-                    
-
-                    
-                        
-            
-            
-                
-                    
-                
-                
-
-                    
-                    
-                        
-                    
-                    
-
-                    
-                        
-            
-            
-                
-                    
-                
-                
-
-                    
-                    
-                    
-
-                    
-            
-        
-                    
-                        
-            
-            
-                
-                    
-                
-                
-
-                    
-                    
-                    
-
-                    
-            
-        
-                    
-                        
-            
-            
-                
-                    
-                
-                
-
-                    
-                    
-                    
-
-                    
-            
-        
-                    
-                        
-            
-            
-                
-                    
-                
-                
-
-                    
-                    
-                    
-
-                    
-            
-        
-                    
-            
-        
-                    
-                        
-            
-            
-                
-                    
-                
-                
-
-                    
-                    
-                    
-
-                    
-            
-        
-                    
-            
-        
-                    
-                        
-            
-            
-                
-                    
-                
-                
-
-                    
-                    
-                    
-
-                    
-            
-        
-                    
-                        
-            
-            
-                
-                    
-                
-                
-
-                    
-                    
-                    
-
-                    
-            
-        
-                    
-                        
-            
-            
-                
-                    
-                    
-                
-                
-
-                    
-                    
-                    
-
-                    
-            
-        
-                    
-                        
-            
-            
-                
-                    
-                        
-                        
-                    
-                
-                
-
-                    
-                    
-                    
-
-                    
-            
-        
-                    
-                        
-            
-            
-                
-                    
-                
-                
-
-                    
-                    
-                    
-
-                    
-            
-        
-                    
-            
-        
-        
-        
 
 
-	 
-	 
-		
-			<a class="nav nav-prev" href="/workshopFCJ.io/vi/4-s3log/" title="Tạo RDS database và triển khai web"> <i class="fa fa-chevron-left"></i></a>
-		
-		
-			<a class="nav nav-next" href="/workshopFCJ.io/vi/6-cleanu/" title="Graph Neural Networks với Neptune ML(chưa xong)" style="margin-right: 0px;"><i class="fa fa-chevron-right"></i></a>
-		
-	
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+      <a class="nav nav-prev" href="/workshopFCJ.io/vi/4-s3log/" title="Tạo RDS database và triển khai web"> <i
+          class="fa fa-chevron-left"></i></a>
+
+
+      <a class="nav nav-next" href="/workshopFCJ.io/vi/6-cleanu/"
+        title="Graph Neural Networks với Neptune ML(chưa xong)" style="margin-right: 0px;"><i
+          class="fa fa-chevron-right"></i></a>
+
+
     </div>
 
-    </section>
-    
-    <div style="left: -1000px; overflow: scroll; position: absolute; top: -1000px; border: none; box-sizing: content-box; height: 200px; margin: 0px; padding: 0px; width: 200px;">
-      <div style="border: none; box-sizing: content-box; height: 200px; margin: 0px; padding: 0px; width: 200px;"></div>
-    </div>
-    <script src="/workshopFCJ.io/js/clipboard.min.js?1754923221"></script>
-    <script src="/workshopFCJ.io/js/perfect-scrollbar.min.js?1754923221"></script>
-    <script src="/workshopFCJ.io/js/perfect-scrollbar.jquery.min.js?1754923221"></script>
-    <script src="/workshopFCJ.io/js/jquery.sticky.js?1754923221"></script>
-    <script src="/workshopFCJ.io/js/featherlight.min.js?1754923221"></script>
-    <script src="/workshopFCJ.io/js/highlight.pack.js?1754923221"></script>
-    <script>hljs.initHighlightingOnLoad();</script>
-    <script src="/workshopFCJ.io/js/modernizr.custom-3.6.0.js?1754923221"></script>
-    <script src="/workshopFCJ.io/js/learn.js?1754923221"></script>
-    <script src="/workshopFCJ.io/js/hugo-learn.js?1754923221"></script>
+  </section>
 
-    <link href="/workshopFCJ.io/mermaid/mermaid.css?1754923221" rel="stylesheet" />
-    <script src="/workshopFCJ.io/mermaid/mermaid.js?1754923221"></script>
-    <script>
-        mermaid.initialize({ startOnLoad: true });
-    </script>
-    <script>
-  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+  <div
+    style="left: -1000px; overflow: scroll; position: absolute; top: -1000px; border: none; box-sizing: content-box; height: 200px; margin: 0px; padding: 0px; width: 200px;">
+    <div style="border: none; box-sizing: content-box; height: 200px; margin: 0px; padding: 0px; width: 200px;"></div>
+  </div>
+  <script src="/workshopFCJ.io/js/clipboard.min.js?1754925934"></script>
+  <script src="/workshopFCJ.io/js/perfect-scrollbar.min.js?1754925934"></script>
+  <script src="/workshopFCJ.io/js/perfect-scrollbar.jquery.min.js?1754925934"></script>
+  <script src="/workshopFCJ.io/js/jquery.sticky.js?1754925934"></script>
+  <script src="/workshopFCJ.io/js/featherlight.min.js?1754925934"></script>
+  <script src="/workshopFCJ.io/js/highlight.pack.js?1754925934"></script>
+  <script>hljs.initHighlightingOnLoad();</script>
+  <script src="/workshopFCJ.io/js/modernizr.custom-3.6.0.js?1754925934"></script>
+  <script src="/workshopFCJ.io/js/learn.js?1754925934"></script>
+  <script src="/workshopFCJ.io/js/hugo-learn.js?1754925934"></script>
 
-  ga('create', 'UA-158079754-2', 'auto');
-  ga('send', 'pageview');
+  <link href="/workshopFCJ.io/mermaid/mermaid.css?1754925934" rel="stylesheet" />
+  <script src="/workshopFCJ.io/mermaid/mermaid.js?1754925934"></script>
+  <script>
+    mermaid.initialize({ startOnLoad: true });
+  </script>
+  <script>
+    (function (i, s, o, g, r, a, m) {
+      i['GoogleAnalyticsObject'] = r; i[r] = i[r] || function () {
+        (i[r].q = i[r].q || []).push(arguments)
+      }, i[r].l = 1 * new Date(); a = s.createElement(o),
+        m = s.getElementsByTagName(o)[0]; a.async = 1; a.src = g; m.parentNode.insertBefore(a, m)
+    })(window, document, 'script', 'https://www.google-analytics.com/analytics.js', 'ga');
 
-</script>
-  </body>
+    ga('create', 'UA-158079754-2', 'auto');
+    ga('send', 'pageview');
+
+  </script>
+</body>
+
 </html>
